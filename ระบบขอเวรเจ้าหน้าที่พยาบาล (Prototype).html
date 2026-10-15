@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ระบบขอเวรเจ้าหน้าที่พยาบาล</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f2;--card:#fff;--tx:#14262b;--mut:#5f7479;--pri:#0b6e7a;--priT:#fff;--soft:#dcefef;--bd:#d5e0e0;--ok:#16794a;--okb:#dcf2e5;--wa:#9a5b00;--wab:#fcecc8;--er:#b3382b;--erb:#fbe0dc;--gr:#55656b;--grb:#e6ecec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b1e;--card:#172529;--tx:#e6f0ef;--mut:#92a9ac;--pri:#4fc3cf;--priT:#06282c;--soft:#1b3a3f;--bd:#27403f;--ok:#6fd49b;--okb:#17382a;--wa:#f1bd62;--wab:#3b2e12;--er:#ff9b8f;--erb:#40201c;--gr:#a9bbbe;--grb:#233438}}
+:root[data-theme="dark"]{--bg:#0f1b1e;--card:#172529;--tx:#e6f0ef;--mut:#92a9ac;--pri:#4fc3cf;--priT:#06282c;--soft:#1b3a3f;--bd:#27403f;--ok:#6fd49b;--okb:#17382a;--wa:#f1bd62;--wab:#3b2e12;--er:#ff9b8f;--erb:#40201c;--gr:#a9bbbe;--grb:#233438}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.55 'Noto Sans Thai',system-ui,sans-serif;min-height:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+header{background:var(--pri);color:var(--priT);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:17px;margin:0;flex:1;min-width:180px}
+header small{display:block;font-weight:400;opacity:.85;font-size:12.5px}
+nav{display:flex;gap:4px;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--bd);padding:0 10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 12px;white-space:nowrap;cursor:pointer;color:var(--mut);font-weight:500}
+nav button.on{color:var(--pri);border-color:var(--pri);font-weight:700}
+nav .n{background:var(--er);color:#fff;border-radius:9px;font-size:11px;padding:1px 6px;margin-left:4px}
+main{max-width:980px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:14px}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 8px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-size:28px;line-height:1.1}.stat span{color:var(--mut);font-size:13px}
+.badge{display:inline-block;padding:1px 9px;border-radius:12px;font-size:12.5px;font-weight:500}
+.PENDING{background:var(--wab);color:var(--wa)}.APPROVED{background:var(--okb);color:var(--ok)}.REJECTED{background:var(--erb);color:var(--er)}.CANCELLED{background:var(--grb);color:var(--gr)}
+label{display:block;font-weight:500;margin:10px 0 4px}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--pri);outline-offset:1px}
+.btn{background:var(--pri);color:var(--priT);border:0;border-radius:8px;padding:9px 16px;cursor:pointer;font-weight:700}
+.btn.sec{background:var(--soft);color:var(--pri)}.btn.bad{background:var(--erb);color:var(--er)}.btn.good{background:var(--okb);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.sm{padding:5px 11px;font-size:13.5px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.req{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--bd)}
+.req:first-of-type{border-top:0}.req .m{color:var(--mut);font-size:13.5px}
+.bar{height:8px;border-radius:4px;background:var(--grb);overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:var(--pri)}.bar i.full{background:var(--er)}
+.hint{font-size:13.5px;padding:8px 10px;border-radius:8px;background:var(--soft);margin-top:10px}.hint.no{background:var(--erb);color:var(--er)}
+.err{color:var(--er);font-size:14px;margin-top:8px;min-height:20px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:13px}
+.cal div{padding:6px 0;border-radius:6px;background:var(--bg);min-height:34px}.cal .h{background:none;color:var(--mut);font-size:12px;min-height:0}
+.cal .t{outline:2px solid var(--pri)}.cal b{display:block;font-size:11px;color:var(--priT);background:var(--pri);border-radius:8px;margin:2px auto 0;width:20px}
+.tbl{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mut);font-weight:500}
+.login{max-width:380px;margin:6vh auto}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{border:1px solid var(--bd);background:var(--bg);border-radius:16px;padding:4px 12px;cursor:pointer;font-size:13.5px}
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}.mod .card{max-width:400px;width:100%;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:9px 18px;border-radius:20px;z-index:30;font-size:14px}
+.empty{color:var(--mut);padding:18px 0;text-align:center}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const T={M:'ขึ้นเวรเช้า',A:'ขึ้นเวรบ่าย',N:'ขึ้นเวรดึก',NS:'งดขึ้นเวร',OFF:'ขอ Off',VAC:'ลาพักร้อน'};
+const ST={PENDING:'รอพิจารณา',APPROVED:'อนุมัติแล้ว',REJECTED:'ปฏิเสธ',CANCELLED:'ยกเลิก'};
+const DEF={M:4,A:4,N:4,NS:2,OFF:4,VAC:2};
+const ACT=['PENDING','APPROVED'];
+const KEY='wsl_proto_v1';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const addD=n=>{const d=new Date();d.setDate(d.getDate()+n);return ymd(d)};
+const today=ymd(new Date()),mon=s=>s.slice(0,7),curM=mon(today);
+const fd=d=>new Date(d+'T00:00').toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short',year:'2-digit'});
+const ft=t=>new Date(t).toLocaleString('th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+async function sha(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return'plain:'+s}}
+let db,me=null,view='dash',editId=null,filt='PENDING',qMonth=curM,toastT;
+const WARD='อายุรกรรมชาย 1';
+async function init(){
+  try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  if(!db){
+    const h=await sha('1234');
+    const now=new Date().toISOString();
+    const R=(id,uid,type,date,status,reason)=>({id,uid,type,date,status,reason,createdAt:now,updatedAt:now});
+    db={nid:10,
+      users:[{id:1,username:'head',name:'พว.สมศรี ใจดี (หัวหน้าวอร์ด)',role:'WARD_ADMIN',ward:WARD,hash:h},
+             {id:2,username:'nurse1',name:'พญ.มานี รักงาน',role:'NURSE_STAFF',ward:WARD,hash:h},
+             {id:3,username:'nurse2',name:'พว.ปิติ มีสุข',role:'NURSE_STAFF',ward:WARD,hash:h}],
+      reqs:[R(1,2,'M',addD(3),'PENDING','ธุระครอบครัวช่วงบ่าย'),R(2,2,'OFF',addD(5),'APPROVED','พาแม่ไปพบแพทย์'),
+            R(3,3,'N',addD(4),'PENDING',''),R(4,3,'OFF',addD(3),'PENDING','งานแต่งเพื่อน'),R(5,3,'VAC',addD(12),'REJECTED','ลาพักร้อน')],
+      quotas:[],logs:[{id:1,rid:5,by:1,type:'REJECT',prev:'PENDING',next:'REJECTED',note:'คนไม่พอในวันดังกล่าว',at:now}]};
+    save();
+  }
+  render();
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
+const user=id=>db.users.find(u=>u.id==id);
+const quota=(w,m,t)=>db.quotas.find(q=>q.ward==w&&q.month==m&&q.type==t)?.max??DEF[t];
+const used=(uid,m,t,ex)=>db.reqs.filter(r=>r.uid==uid&&mon(r.date)==m&&r.type==t&&ACT.includes(r.status)&&r.id!=ex).length;
+const isAdmin=()=>me.role=='WARD_ADMIN';
+function log(rid,type,prev,next,note){db.logs.unshift({id:db.nid++,rid,by:me.id,type,prev,next,note:note||'',at:new Date().toISOString()})}
+function toast(m){clearTimeout(toastT);document.querySelectorAll('.toast').forEach(e=>e.remove());const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);toastT=setTimeout(()=>e.remove(),2400)}
+function modal(title,withText,okLabel,cb){
+  const m=document.createElement('div');m.className='mod';
+  m.innerHTML=`<div class="card"><h3>${esc(title)}</h3>${withText?'<textarea id="mt" rows="3" placeholder="ระบุเหตุผล"></textarea><div class="err" id="me"></div>':''}<div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn sec" id="mc">ปิด</button><button class="btn" id="mo">${okLabel}</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelector('#mc').onclick=()=>m.remove();
+  m.querySelector('#mo').onclick=()=>{const v=withText?m.querySelector('#mt').value.trim():'';if(withText&&!v){m.querySelector('#me').textContent='ต้องระบุเหตุผลก่อนปฏิเสธ';return}m.remove();cb(v)};
+}
+const badge=s=>`<span class="badge ${s}">${ST[s]}</span>`;
+function tabs(){
+  const pend=db.reqs.filter(r=>r.status=='PENDING'&&user(r.uid).ward==me.ward&&r.uid!=me.id).length;
+  const t=[['dash','แดชบอร์ด'],['new',editId?'แก้ไขคำขอ':'ยื่นคำขอ'],['mine','คำขอของฉัน']];
+  if(isAdmin())t.splice(1,0,['approve','พิจารณาคำขอ'+(pend?`<span class="n">${pend}</span>`:'')]),t.push(['quota','ตั้งโควตา'],['audit','Audit Log']);
+  return t.map(([k,l])=>`<button class="${view==k?'on':''}" data-act="nav" data-v="${k}">${l}</button>`).join('');
+}
+function render(){
+  const a=$('#app');
+  if(!me){a.innerHTML=`<div class="login"><div class="card"><h2>ระบบขอเวรเจ้าหน้าที่พยาบาล</h2><div class="m" style="color:var(--mut)">เข้าสู่ระบบด้วยบัญชีที่ลงทะเบียนไว้</div>
+  <label for="u">ชื่อผู้ใช้</label><input id="u" autocomplete="username"><label for="p">รหัสผ่าน</label><input id="p" type="password" autocomplete="current-password">
+  <div class="err" id="le"></div><button class="btn" style="width:100%;margin-top:6px" data-act="login">เข้าสู่ระบบ</button>
+  <div class="chips"><span style="color:var(--mut);font-size:13px;width:100%">บัญชีทดลอง (รหัสผ่าน 1234)</span>
+  <button class="chip" data-act="fill" data-u="head">head · หัวหน้าวอร์ด</button><button class="chip" data-act="fill" data-u="nurse1">nurse1 · พยาบาล</button><button class="chip" data-act="fill" data-u="nurse2">nurse2 · พยาบาล</button></div></div></div>`;return}
+  const V={dash:vDash,new:vNew,mine:vMine,approve:vApprove,quota:vQuota,audit:vAudit}[view]();
+  a.innerHTML=`<header><h1>ระบบขอเวร · ${esc(me.ward)}<small>${esc(me.name)} · ${isAdmin()?'WARD_ADMIN':'NURSE_STAFF'}</small></h1><button class="btn sec sm" data-act="logout">ออกจากระบบ</button></header><nav>${tabs()}</nav><main>${V}</main>`;
+  if(view=='new')hint();
+}
+function reqRow(r,mode){
+  const u=user(r.uid),mine=r.uid==me.id;
+  let btn='';
+  if(mode=='mine'&&r.status=='PENDING')btn=`<button class="btn sec sm" data-act="edit" data-id="${r.id}">แก้ไข</button><button class="btn bad sm" data-act="cancel" data-id="${r.id}">ยกเลิก</button>`;
+  if(mode=='mine'&&r.status=='APPROVED')btn=`<span class="m">ยกเลิกหลังอนุมัติ: รอยืนยันนโยบาย</span>`;
+  if(mode=='approve'&&r.status=='PENDING')btn=mine?`<span class="m">คำขอของตนเอง: รอยืนยันกลไกอนุมัติ (BR-05)</span>`:`<button class="btn good sm" data-act="approve" data-id="${r.id}">อนุมัติ</button><button class="btn bad sm" data-act="reject" data-id="${r.id}">ปฏิเสธ</button>`;
+  const rj=r.status=='REJECTED'?db.logs.find(l=>l.rid==r.id&&l.type=='REJECT'):null;
+  return `<div class="req"><div><b>${T[r.type]}</b> · ${fd(r.date)} ${badge(r.status)}<div class="m">${mode=='approve'?esc(u.name)+' · ':''}${r.reason?esc(r.reason):'ไม่ได้ระบุเหตุผล'}${rj?` · เหตุผลที่ปฏิเสธ: ${esc(rj.note)}`:''}</div></div><div class="row">${btn}</div></div>`;
+}
+function calendar(list){
+  const d=new Date(),y=d.getFullYear(),m=d.getMonth(),first=new Date(y,m,1).getDay(),n=new Date(y,m+1,0).getDate();
+  let h=['อา','จ','อ','พ','พฤ','ศ','ส'].map(x=>`<div class="h">${x}</div>`).join('')+'<div></div>'.repeat(first);
+  for(let i=1;i<=n;i++){const s=curM+'-'+String(i).padStart(2,'0'),c=list.filter(r=>r.date==s&&ACT.includes(r.status)).length;h+=`<div class="${s==today?'t':''}">${i}${c?`<b>${c}</b>`:''}</div>`}
+  return `<div class="cal">${h}</div>`;
+}
+function vDash(){
+  const ward=db.reqs.filter(r=>user(r.uid).ward==me.ward),list=isAdmin()?ward:ward.filter(r=>r.uid==me.id);
+  const cnt=s=>list.filter(r=>r.status==s).length;
+  const stats=['PENDING','APPROVED','REJECTED','CANCELLED'].map(s=>`<div class="stat"><b>${cnt(s)}</b><span>${ST[s]}</span></div>`).join('');
+  const staff=db.users.filter(u=>u.ward==me.ward&&u.role=='NURSE_STAFF');
+  let q;
+  if(isAdmin()){
+    q=`<div class="card"><h3>สถิติคำขอเดือนนี้แยกตามประเภท</h3><div class="tbl"><table><tr><th>ประเภท</th><th>โควตา/คน</th><th>รอ</th><th>อนุมัติ</th></tr>${Object.keys(T).map(t=>{const l=list.filter(r=>r.type==t&&mon(r.date)==curM);return`<tr><td>${T[t]}</td><td>${quota(me.ward,curM,t)}</td><td>${l.filter(r=>r.status=='PENDING').length}</td><td>${l.filter(r=>r.status=='APPROVED').length}</td></tr>`}).join('')}</table></div></div>
+    <div class="card"><h3>โควตาคงเหลือรายคน (เดือนนี้)</h3><div class="tbl"><table><tr><th>ชื่อ</th>${Object.values(T).map(x=>`<th>${x}</th>`).join('')}</tr>${staff.map(u=>`<tr><td>${esc(u.name)}</td>${Object.keys(T).map(t=>`<td>${quota(me.ward,curM,t)-used(u.id,curM,t)}</td>`).join('')}</tr>`).join('')}</table></div></div>`;
+  }else{
+    q=`<div class="card"><h3>โควตาคงเหลือของฉัน (เดือนนี้)</h3>${Object.keys(T).map(t=>{const mx=quota(me.ward,curM,t),u=used(me.id,curM,t);return`<div style="margin:10px 0"><div class="row" style="justify-content:space-between"><span>${T[t]}</span><span>ใช้แล้ว ${u}/${mx} · เหลือ <b>${Math.max(mx-u,0)}</b></span></div><div class="bar"><i class="${u>=mx?'full':''}" style="width:${mx?Math.min(u/mx*100,100):100}%"></i></div></div>`}).join('')}</div>`;
+  }
+  return `<h2>${isAdmin()?'ภาพรวมคำขอทั้งวอร์ด':'ภาพรวมคำขอของฉัน'}</h2><div class="grid" style="margin-bottom:14px">${stats}</div>${q}<div class="card"><h3>ปฏิทินเดือนนี้ (จำนวนคำขอที่รอ/อนุมัติ)</h3>${calendar(list)}</div>`;
+}
+function vNew(){
+  const r=editId?db.reqs.find(x=>x.id==editId):null;
+  return `<div class="card" style="max-width:520px"><h2>${r?'แก้ไขคำขอ':'ยื่นคำขอเวร / ขอลา'}</h2>
+  <label for="ft">ประเภทคำขอ</label><select id="ft">${Object.entries(T).map(([k,v])=>`<option value="${k}" ${r&&r.type==k?'selected':''}>${v}</option>`).join('')}</select>
+  <label for="fd">วันที่ต้องการ</label><input id="fd" type="date" min="${today}" value="${r?r.date:''}">
+  <label for="fr">เหตุผล (ถ้ามี)</label><textarea id="fr" rows="3">${r?esc(r.reason):''}</textarea>
+  <div class="hint" id="hint"></div><div class="err" id="fe"></div>
+  <div class="row"><button class="btn" data-act="save">${r?'บันทึกการแก้ไข':'บันทึกคำขอ'}</button>${r?'<button class="btn sec" data-act="nav" data-v="mine">ยกเลิกการแก้ไข</button>':''}</div></div>`;
+}
+function hint(){
+  const t=$('#ft').value,d=$('#fd').value,m=d?mon(d):curM,mx=quota(me.ward,m,t),u=used(me.id,m,t,editId),h=$('#hint');
+  h.className='hint'+(u>=mx?' no':'');h.textContent=`${T[t]} เดือน ${m}: ใช้ไปแล้ว ${u}/${mx} ครั้ง (นับรอพิจารณา + อนุมัติ) เหลือ ${Math.max(mx-u,0)}`;
+}
+function submit(){
+  const t=$('#ft').value,d=$('#fd').value,r=$('#fr').value.trim(),e=$('#fe');
+  if(!d)return e.textContent='กรุณาเลือกวันที่';
+  if(d<today)return e.textContent='ยื่นคำขอย้อนหลังไม่ได้ กรุณาเลือกวันนี้หรือวันถัดไป';
+  const dup=db.reqs.find(x=>x.uid==me.id&&x.date==d&&ACT.includes(x.status)&&x.id!=editId);
+  if(dup)return e.textContent=`วันที่ ${fd(d)} คุณมีคำขอ "${T[dup.type]}" อยู่แล้ว`;
+  const m=mon(d),mx=quota(me.ward,m,t),u=used(me.id,m,t,editId);
+  if(u+1>mx)return e.textContent=`โควตาคำขอประเภทนี้เต็มแล้ว (${u}/${mx})`;
+  const now=new Date().toISOString();
+  if(editId){const x=db.reqs.find(q=>q.id==editId);Object.assign(x,{type:t,date:d,reason:r,updatedAt:now});log(x.id,'EDIT','PENDING','PENDING');toast('บันทึกการแก้ไขแล้ว');editId=null}
+  else{const x={id:db.nid++,uid:me.id,type:t,date:d,status:'PENDING',reason:r,createdAt:now,updatedAt:now};db.reqs.push(x);log(x.id,'SUBMIT',null,'PENDING');toast('บันทึกคำขอแล้ว สถานะ: รอพิจารณา')}
+  save();view='mine';render();
+}
+function vMine(){
+  const l=db.reqs.filter(r=>r.uid==me.id).sort((a,b)=>b.date.localeCompare(a.date));
+  return `<div class="card"><h2>คำขอของฉัน</h2>${l.length?l.map(r=>reqRow(r,'mine')).join(''):'<div class="empty">ยังไม่มีคำขอ ไปที่แท็บ "ยื่นคำขอ" เพื่อเริ่มต้น</div>'}</div>`;
+}
+function vApprove(){
+  let l=db.reqs.filter(r=>user(r.uid).ward==me.ward);if(filt!='ALL')l=l.filter(r=>r.status==filt);
+  l.sort((a,b)=>a.date.localeCompare(b.date));
+  return `<div class="card"><h2>พิจารณาคำขอเวร</h2><div class="row" style="margin-bottom:6px">${['PENDING','APPROVED','REJECTED','CANCELLED','ALL'].map(s=>`<button class="btn ${filt==s?'':'sec'} sm" data-act="filt" data-s="${s}">${s=='ALL'?'ทั้งหมด':ST[s]}</button>`).join('')}</div>${l.length?l.map(r=>reqRow(r,'approve')).join(''):'<div class="empty">ไม่มีคำขอในสถานะนี้</div>'}</div>`;
+}
+function vQuota(){
+  return `<div class="card" style="max-width:520px"><h2>ตั้งโควตาคำขอเวร</h2><div style="color:var(--mut);font-size:14px">จำนวนสูงสุดต่อคน ต่อประเภท ต่อเดือน (รอบเดือนตามปฏิทิน: รอยืนยันกับหัวหน้าวอร์ด)</div>
+  <label for="qm">เดือน</label><input id="qm" type="month" value="${qMonth}" data-act="qmonth">
+  ${Object.entries(T).map(([k,v])=>`<label for="q_${k}">${v}</label><input id="q_${k}" type="number" min="0" max="31" value="${quota(me.ward,qMonth,k)}">`).join('')}
+  <div class="err" id="qe"></div><button class="btn" data-act="saveq">บันทึกการตั้งค่า</button></div>`;
+}
+function vAudit(){
+  const l=db.logs.filter(x=>user(db.reqs.find(r=>r.id==x.rid)?.uid||1)?.ward==me.ward);
+  const A={SUBMIT:'ยื่นคำขอ',EDIT:'แก้ไข',CANCEL:'ยกเลิก',APPROVE:'อนุมัติ',REJECT:'ปฏิเสธ'};
+  return `<div class="card"><h2>Audit Log</h2><div class="tbl"><table><tr><th>เวลา</th><th>ผู้ทำรายการ</th><th>การกระทำ</th><th>คำขอ</th><th>สถานะ</th><th>หมายเหตุ</th></tr>${l.map(x=>{const r=db.reqs.find(q=>q.id==x.rid);return`<tr><td>${ft(x.at)}</td><td>${esc(user(x.by).name)}</td><td>${A[x.type]}</td><td>#${x.rid} ${r?T[r.type]+' '+fd(r.date):''}</td><td>${x.prev?ST[x.prev]+' → ':''}${ST[x.next]}</td><td>${esc(x.note)}</td></tr>`}).join('')}</table></div></div>`;
+}
+function setStatus(id,next,type,note){
+  const r=db.reqs.find(x=>x.id==id);log(id,type,r.status,next,note);r.status=next;r.updatedAt=new Date().toISOString();save();render();
+}
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act,id=+b.dataset.id;
+  if(a=='fill'){$('#u').value=b.dataset.u;$('#p').value='1234'}
+  else if(a=='login'){
+    const u=db.users.find(x=>x.username==$('#u').value.trim()),h=await sha($('#p').value);
+    if(!u||u.hash!=h)return $('#le').textContent='ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง';
+    me=u;view='dash';render();
+  }
+  else if(a=='logout'){me=null;editId=null;render()}
+  else if(a=='nav'){if(b.dataset.v!='new')editId=null;view=b.dataset.v;render()}
+  else if(a=='save')submit();
+  else if(a=='edit'){editId=id;view='new';render()}
+  else if(a=='cancel')modal('ยกเลิกคำขอนี้? โควตาจะถูกคืนทันที',false,'ยืนยันยกเลิก',()=>{setStatus(id,'CANCELLED','CANCEL');toast('ยกเลิกแล้ว คืนโควตาให้แล้ว')});
+  else if(a=='approve'){setStatus(id,'APPROVED','APPROVE');toast('อนุมัติแล้ว ตัดโควตาเรียบร้อย')}
+  else if(a=='reject')modal('ปฏิเสธคำขอ',true,'ปฏิเสธคำขอ',v=>{setStatus(id,'REJECTED','REJECT',v);toast('ปฏิเสธแล้ว คืนโควตาให้ผู้ยื่น')});
+  else if(a=='filt'){filt=b.dataset.s;render()}
+  else if(a=='saveq'){
+    const vals={};for(const k in T){const v=parseInt($('#q_'+k).value,10);if(isNaN(v)||v<0)return $('#qe').textContent='โควตาต้องเป็นเลขตั้งแต่ 0 ขึ้นไป';vals[k]=v}
+    for(const k in vals){const q=db.quotas.find(x=>x.ward==me.ward&&x.month==qMonth&&x.type==k);q?q.max=vals[k]:db.quotas.push({ward:me.ward,month:qMonth,type:k,max:vals[k]})}
+    save();toast('บันทึกโควตาเดือน '+qMonth+' แล้ว');
+  }
+});
+document.addEventListener('change',e=>{
+  if(e.target.dataset.act=='qmonth'&&e.target.value){qMonth=e.target.value;render()}
+  if(['ft','fd'].includes(e.target.id))hint();
+});
+init();
+</script>
+</body>
+</html>
